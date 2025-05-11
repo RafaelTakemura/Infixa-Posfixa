@@ -5,11 +5,11 @@
 #include "pilha.h"
 
 Pilha* criaPilha(int cap) {
-    Pilha* p = (Pilha*) malloc(sizeof(Pilha));
-    p->topo = -1;
+    Pilha* p = (Pilha*) malloc(sizeof(Pilha));   // Aloca dinamicamente a memória para p
+    p->topo = -1;  // O topo é igual a -1 quando a pilha está vazia
     p->cap = cap;
-    p->valores = (char*) malloc(cap * sizeof(char));
-    return p;
+    p->valores = (char*) malloc(cap * sizeof(char));  // Aloca dinamicamente a memória para valores
+    return p;  // Retorna p
 }
 
 void empilhar(Pilha* p, char elem) {
@@ -57,40 +57,46 @@ int verificaPrec(char op) {
 }
 
 void traduzPosfixa(char* inf) {
-    int tam = strlen(inf);
+    int tam = strlen(inf);   // Guarda o tamanho da string inf em tam
     char posfixa[tam], aux, op;
     int j=0;
     Pilha* p;
     p = criaPilha(tam);
+    // Percorre a string inf
     for(int i=0; i<tam; i++) {
-        aux = inf[i];
+        aux = inf[i];    // aux recebe um caractere da string inf na posição i
+        // Se aux for um número, adiciona ele na string posfixa
         if(isalnum(aux)) {
             posfixa[j] = aux;
             j++;
         }
+        // Se aux for igual a (, empilha ele em p
         else if (aux == '(') {
             empilhar(p, aux);
         }
+        // Se aux for igual a ), desempilha o topo até que ele seja igual a ( ou a lista fique vazia
         else if (aux == ')') {
             while(p->topo != -1 && p->valores[p->topo] != '(') {
                 op = desempilhar(p);
                 posfixa[j] = op;
                 j++;
             }
-            op = desempilhar(p);
+            op = desempilhar(p);  // desempilha o ( e não o adiciona a string
         }
         else {
+            // Enquanto a precedência de aux for menor ou igual a precedencia do valor no topo da pilha, desempilha
             while(p->topo != -1 && (verificaPrec(aux) < verificaPrec(p->valores[p->topo]) || verificaPrec(aux) == verificaPrec(p->valores[p->topo]))) {
                 posfixa[j] = desempilhar(p);
                 j++;
             }
-            empilhar(p, aux);
+            empilhar(p, aux); // Empilha aux
         }
     }
+    // Desempilha até que a pilha fique vazia
     while(estaVazia(p) == 0) {
         posfixa[j] = desempilhar(p);
         j++;
     }
-    posfixa[j] = '\0';
-    printf("%s", posfixa);
+    posfixa[j] = '\0';   // Adiciona '\0' no final da string
+    printf("%s", posfixa);  // Printa a string posfixa na tela
 }
