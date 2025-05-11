@@ -81,7 +81,7 @@ void traduzPosfixa(char* inf) {
                 posfixa[j] = op;
                 j++;
             }
-            op = desempilhar(p);  // desempilha o ( e não o adiciona a string
+            op = desempilhar(p);  // desempilha o ( e não o adiciona na string
         }
         else {
             // Enquanto a precedência de aux for menor ou igual a precedencia do valor no topo da pilha, desempilha
